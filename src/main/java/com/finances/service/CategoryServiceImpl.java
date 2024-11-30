@@ -61,7 +61,7 @@ public class CategoryServiceImpl implements CategoryService {
     public Category findById(long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(
-                () -> new CategoryNotFoundException("Category with id " + id + " not found")
+                        () -> new CategoryNotFoundException("Category with id " + id + " not found")
                 );
     }
 
@@ -80,8 +80,8 @@ public class CategoryServiceImpl implements CategoryService {
         newDefaultExpenseCategory.setDefaultCategory(true);
 
         Category newDefaultIncomeCategory = new Category("defaultIncome", user, null);
-        newDefaultExpenseCategory.setType(Category.CategoryType.INCOME);
-        newDefaultExpenseCategory.setDefaultCategory(true);
+        newDefaultIncomeCategory.setType(Category.CategoryType.INCOME);
+        newDefaultIncomeCategory.setDefaultCategory(true);
 
         categoryRepository.save(newDefaultExpenseCategory);
         categoryRepository.save(newDefaultIncomeCategory);

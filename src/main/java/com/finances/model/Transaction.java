@@ -17,7 +17,7 @@ import lombok.Data;
 @Table(name = "tbl_transaction")
 public class Transaction
 {
-    enum TransactionType
+    public enum TransactionType
     {
         INCOME,
         EXPENSE
