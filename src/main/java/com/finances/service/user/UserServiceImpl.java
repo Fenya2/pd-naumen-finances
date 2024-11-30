@@ -40,7 +40,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(User user) {
-        checkLoginNotExist(user.getLogin());
+        userRepository.findByLogin(user.getLogin()).ifPresent(existingUser -> {
+            if (existingUser.getId() != user.getId()) {
+                throw new UserAlreadyExistException("User with login " + user.getLogin() + " already exists");
+            }
+        });
         checkPasswordCorect(user.getPassword());
         userRepository.save(user);
     }
