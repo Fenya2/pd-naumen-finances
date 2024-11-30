@@ -64,6 +64,7 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setAccount(account);
         transaction.setAmount(transactionCreateRequest.amount());
         transaction.setDate(transactionCreateRequest.date());
+        transaction.setDescription(transactionCreateRequest.description());
         return transactionRepository.save(transaction);
     }
 }

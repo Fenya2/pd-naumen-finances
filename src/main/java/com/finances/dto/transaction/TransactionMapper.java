@@ -6,6 +6,7 @@ import com.finances.model.Transaction;
  * Занимается преобразованием транзакций в различные dto
  */
 public class TransactionMapper {
+    private TransactionMapper() {}
     public static TransactionDTO toDTO(Transaction transaction) {
         return new TransactionDTO(
                 transaction.getId(),
@@ -17,6 +18,6 @@ public class TransactionMapper {
     }
 
     public static TransactionCreateResponse toCreatedResponse(Transaction transaction) {
-        return new TransactionCreateResponse(transaction.getId(), transaction.getDescription());
+        return new TransactionCreateResponse(transaction.getId());
     }
 }

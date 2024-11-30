@@ -48,7 +48,8 @@ class TransactionServiceImplTest {
                 1L,
                 1L,
                 date,
-                100.0
+                100.0,
+                "description"
         );
 
         final User user = new User();
@@ -66,10 +67,11 @@ class TransactionServiceImplTest {
 
         final Transaction transaction = transactionService.createTransaction(request);
         Assertions.assertEquals(1L, transaction.getId());
-        Assertions.assertEquals(account, transaction.getAccount());
         Assertions.assertEquals(Transaction.TransactionType.INCOME, transaction.getTransactionType());
-        Assertions.assertEquals(100, transaction.getAmount());
+        Assertions.assertEquals(account, transaction.getAccount());
         Assertions.assertEquals(date, transaction.getDate());
+        Assertions.assertEquals(100, transaction.getAmount());
+        Assertions.assertEquals("description", transaction.getDescription());
     }
 
     @Test
@@ -80,7 +82,8 @@ class TransactionServiceImplTest {
                 0,
                 1L,
                 date,
-                100.0
+                100.0,
+                "description"
         );
 
         final User user = new User();
@@ -103,6 +106,7 @@ class TransactionServiceImplTest {
         Assertions.assertEquals(Transaction.TransactionType.INCOME, transaction.getTransactionType());
         Assertions.assertEquals(100, transaction.getAmount());
         Assertions.assertEquals(date, transaction.getDate());
+        Assertions.assertEquals("description", transaction.getDescription());
     }
 
     private static Date getTestDate()
