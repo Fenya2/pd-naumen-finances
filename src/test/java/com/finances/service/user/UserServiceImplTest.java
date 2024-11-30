@@ -1,10 +1,9 @@
-package com.finances.service;
+package com.finances.service.user;
 
 import com.finances.model.User;
 import com.finances.repository.UserRepository;
+import com.finances.service.CategoryService;
 import com.finances.service.account.AccountService;
-import com.finances.service.user.UserAlreadyExistException;
-import com.finances.service.user.UserServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
