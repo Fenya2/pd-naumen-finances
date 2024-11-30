@@ -1,7 +1,7 @@
 package com.finances.service.user;
 
-import com.finances.service.AccountService;
 import com.finances.service.CategoryService;
+import com.finances.service.account.AccountService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final CategoryService categoryService;
-    private final AccountService accountService;
+    private final com.finances.service.account.AccountService accountService;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, CategoryService categoryService, AccountService accountService) {
@@ -47,6 +47,11 @@ public class UserServiceImpl implements UserService {
         });
         checkPasswordCorect(user.getPassword());
         userRepository.save(user);
+    }
+
+    @Override
+    public User findById(long id) {
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
     }
 
     private void checkLoginNotExist(final String login) {

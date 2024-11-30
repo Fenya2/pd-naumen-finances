@@ -13,4 +13,9 @@ public interface UserService
      * Обновляет данные переданного пользователя (должен быть установлен id)
      */
     void update(User user);
+
+    /**
+     * Возвращает пользователя по его идентификатору
+     */
+    User findById(long id);
 }

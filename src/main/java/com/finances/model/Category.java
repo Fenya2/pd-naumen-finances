@@ -12,8 +12,17 @@ import lombok.Data;
 @Table(name = "tbl_category")
 public class Category
 {
+    /**
+     * Тип категории транзакций
+     */
     public enum CategoryType {
+        /**
+         * Расхода
+         */
         EXPENSE,
+        /**
+         * Дохода
+         */
         INCOME
     }
 

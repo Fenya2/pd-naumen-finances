@@ -2,6 +2,7 @@ package com.finances.service;
 
 import com.finances.model.User;
 import com.finances.repository.UserRepository;
+import com.finances.service.account.AccountService;
 import com.finances.service.user.UserAlreadyExistException;
 import com.finances.service.user.UserServiceImpl;
 import org.junit.jupiter.api.Assertions;

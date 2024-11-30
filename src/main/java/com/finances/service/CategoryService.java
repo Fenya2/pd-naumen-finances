@@ -48,8 +48,7 @@ public interface CategoryService {
     Category findByIdSilent(long id);
 
     /**
-     * Создает категорию по умолчанию для пользователя. Возвращает созданную категорию
-     * Если категория по умолчанию уже существует, возвращает ее
+     * Создает категории по умолчанию для пользователя
      */
     void createDefaultCategoriesForUser(User user);
 }
