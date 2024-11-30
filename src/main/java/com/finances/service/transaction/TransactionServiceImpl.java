@@ -12,6 +12,9 @@ import com.finances.service.CategoryService;
 import com.finances.service.account.AccountService;
 import com.finances.service.user.UserService;
 import jakarta.transaction.Transactional;
+
+import java.util.Date;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +43,7 @@ public class TransactionServiceImpl implements TransactionService {
         final User user = userService.findById(transactionCreateRequest.userId());
         final double amount = transactionCreateRequest.amount();
         final Account account = accountService.getUserAccount(user);
-        Category category = categoryService.findByIdSilent(transactionCreateRequest.CategoryId());
+        final Category category = categoryService.findByIdSilent(transactionCreateRequest.CategoryId());
         transaction.setCategory(category);
 
         final TransactionType transactionType = transactionCreateRequest.transactionType();
@@ -66,5 +69,32 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setDate(transactionCreateRequest.date());
         transaction.setDescription(transactionCreateRequest.description());
         return transactionRepository.save(transaction);
+    }
+
+    @Override
+    @Transactional
+    public void createInboundTransaction(final Account from, final Account to, final double amount) {
+        if(Objects.equals(from.getId(), to.getId())) {
+            throw new InvalidAccountException("from and to cannot be the same");
+        }
+        accountService.withdraw(from, amount);
+        accountService.deposit(to, amount);
+
+        final Date date = new Date();
+
+        final Transaction transactionFrom = new Transaction();
+        transactionFrom.setAccount(from);
+        transactionFrom.setTransactionType(TransactionType.EXPENSE);
+        transactionFrom.setAmount(amount);
+        transactionFrom.setDate(date);
+
+        final Transaction transactionTo = new Transaction();
+        transactionTo.setAccount(to);
+        transactionTo.setTransactionType(TransactionType.INCOME);
+        transactionTo.setAmount(amount);
+        transactionTo.setDate(date);
+
+        transactionRepository.save(transactionFrom);
+        transactionRepository.save(transactionTo);
     }
 }

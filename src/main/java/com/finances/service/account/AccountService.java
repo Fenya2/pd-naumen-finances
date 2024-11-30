@@ -1,8 +1,12 @@
 package com.finances.service.account;
 
 import com.finances.model.Account;
+import com.finances.model.Goal;
 import com.finances.model.User;
 
+/**
+ * Сервис для работы со счетами пользователя
+ */
 public interface AccountService {
     /**
      * Создает основной счет пользователя. Если он уже существует, поднимает исключение.
@@ -14,6 +18,11 @@ public interface AccountService {
      * Возвращает основной счет пользователя
      */
     Account getUserAccount(User user);
+
+    /**
+     * Создает счет для указанной цели
+     */
+    Account createGoalAccount(Goal goal);
 
     /**
      * Вносит указанную сумму на указанный счет

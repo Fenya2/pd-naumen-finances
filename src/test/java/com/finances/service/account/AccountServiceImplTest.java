@@ -1,6 +1,7 @@
 package com.finances.service.account;
 
 import com.finances.model.Account;
+import com.finances.model.Account.AccountType;
 import com.finances.model.User;
 import com.finances.repository.AccountRepository;
 import org.junit.jupiter.api.Assertions;
@@ -30,7 +31,7 @@ class AccountServiceImplTest {
     @Test
     void createUserAccount() {
         final User user = new User();
-        when(accountRepository.findByOwner(user)).thenReturn(Optional.empty());
+        when(accountRepository.findByOwnerAndAccountType(user, AccountType.DEFAULT)).thenReturn(Optional.empty());
         when(accountRepository.save(any())).thenAnswer(invocation -> {
             final Account account = invocation.getArgument(0);
             account.setId(1L);
@@ -50,7 +51,7 @@ class AccountServiceImplTest {
         final Account account = new Account();
         account.setAccountType(Account.AccountType.DEFAULT);
 
-        when(accountRepository.findByOwner(user)).thenReturn(Optional.of(account));
+        when(accountRepository.findByOwnerAndAccountType(user, AccountType.DEFAULT)).thenReturn(Optional.of(account));
 
         final Account retrievedAccount = accountService.getUserAccount(user);
         Assertions.assertSame(account, retrievedAccount);
@@ -60,7 +61,7 @@ class AccountServiceImplTest {
     void getUserAccountNotFound() {
         User user = new User();
 
-        when(accountRepository.findByOwner(user)).thenReturn(Optional.empty());
+        when(accountRepository.findByOwnerAndAccountType(user, AccountType.DEFAULT)).thenReturn(Optional.empty());
 
         Assertions.assertThrows(AccountNotFoundException.class, () -> {
             accountService.getUserAccount(user);
