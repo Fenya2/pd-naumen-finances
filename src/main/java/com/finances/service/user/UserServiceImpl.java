@@ -1,13 +1,12 @@
 package com.finances.service.user;
 
+import com.finances.model.User;
+import com.finances.repository.UserRepository;
 import com.finances.service.CategoryService;
 import com.finances.service.account.AccountService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.finances.model.User;
-import com.finances.repository.UserRepository;
 
 import java.util.Optional;
 
@@ -16,10 +15,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final CategoryService categoryService;
-    private final com.finances.service.account.AccountService accountService;
+    private final AccountService accountService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, CategoryService categoryService, AccountService accountService) {
+    public UserServiceImpl(UserRepository userRepository,
+                           CategoryService categoryService,
+                           AccountService accountService) {
         this.userRepository = userRepository;
         this.categoryService = categoryService;
         this.accountService = accountService;
