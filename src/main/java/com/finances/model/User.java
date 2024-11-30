@@ -14,8 +14,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "tbl_user")
-public class User
-{
+public class User {
     /**
      * Идентификатор пользователя
      */
@@ -35,19 +34,25 @@ public class User
     @Column(name = "name")
     private String name;
 
+    public User() {}
+
+    public User(String login, String password, String name) {
+        this.login = login;
+        this.password = password;
+        this.name = name;
+    }
+
     @Override
-    public boolean equals(Object o)
-    {
-        if (this == o)
+    public boolean equals(Object o) {
+        if(this == o)
             return true;
-        if (!(o instanceof User user))
+        if(!(o instanceof User user))
             return false;
         return id == user.id;
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Long.hashCode(id);
     }
 }
