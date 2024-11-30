@@ -2,8 +2,6 @@ package com.finances.model;
 
 import java.util.Date;
 
-import com.finances.model.category.Category;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

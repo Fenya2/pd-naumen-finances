@@ -1,19 +1,7 @@
-package com.finances.model.category;
+package com.finances.model;
 
-import java.util.Objects;
-
-import com.finances.model.User;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorColumn;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.*;
 import lombok.Data;
 
 /**
@@ -22,10 +10,24 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "tbl_category")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "category_type")
-public abstract class Category
+public class Category
 {
+    public enum CategoryType {
+        EXPENSE,
+        INCOME
+    }
+
+    public Category() {}
+
+    public Category(String name, User owner, @Nullable Category parentCategory) {
+        this.name = name;
+        this.owner = owner;
+        this.parent = parentCategory;
+
+        if (parentCategory != null)
+            this.type = parentCategory.getType();
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -41,6 +43,11 @@ public abstract class Category
 
     @Column(nullable = false)
     private String name;
+
+    @Enumerated(EnumType.STRING)
+    private CategoryType type;
+
+    private boolean defaultCategory;
 
     @Override
     public boolean equals(Object o)
