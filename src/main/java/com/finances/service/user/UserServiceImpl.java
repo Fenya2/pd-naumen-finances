@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
         final User user = new User(login, password, name);
         userRepository.save(user);
         categoryService.createDefaultCategoriesForUser(user);
-        accountService.createDefaultAccountForUser(user);
+        accountService.createUserAccount(user);
         return user;
     }
 
