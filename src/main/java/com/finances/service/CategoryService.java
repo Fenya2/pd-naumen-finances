@@ -19,7 +19,7 @@ public interface CategoryService {
      * Возвращает дефолтную категорию доходов для пользователя
      *
      * @param user пользователь, владелец категории
-     * @return дефолтная категория доходов пользователя или или {@link DefaultCategoryNotFindException}
+     * @return дефолтная категория доходов пользователя или или {@link DefaultCategoryNotFoundException}
      */
     Category getDefaultIncomeCategoryForUser(User user);
 
@@ -27,7 +27,7 @@ public interface CategoryService {
      * Возвращает дефолтную категорию расходов для пользователя
      *
      * @param user пользователь, владелец категории
-     * @return дефолтная категория расходов пользователя или {@link DefaultCategoryNotFindException}
+     * @return дефолтная категория расходов пользователя или {@link DefaultCategoryNotFoundException}
      */
     Category getDefaultExpenseCategoryForUser(User user);
 
@@ -51,5 +51,5 @@ public interface CategoryService {
      * Создает категорию по умолчанию для пользователя. Возвращает созданную категорию
      * Если категория по умолчанию уже существует, возвращает ее
      */
-    void createDefaultsCategoryForUser(User user);
+    void createDefaultCategoriesForUser(User user);
 }

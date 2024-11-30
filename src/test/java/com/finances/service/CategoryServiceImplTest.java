@@ -87,7 +87,7 @@ class CategoryServiceImplTest {
                 .thenReturn(null);
 
         assertThatThrownBy(() -> categoryService.getDefaultIncomeCategoryForUser(testUser))
-                .isInstanceOf(DefaultCategoryNotFindException.class)
+                .isInstanceOf(DefaultCategoryNotFoundException.class)
                 .hasMessageContaining("Default income category not found");
     }
 
@@ -96,7 +96,7 @@ class CategoryServiceImplTest {
         when(categoryRepository.getAllCategoryByOwnerAndDefaultCategoryTrue(testUser))
                 .thenReturn(List.of());
 
-        categoryService.createDefaultsCategoryForUser(testUser);
+        categoryService.createDefaultCategoriesForUser(testUser);
 
         verify(categoryRepository, times(2)).save(any(Category.class));
     }
@@ -107,7 +107,7 @@ class CategoryServiceImplTest {
         when(categoryRepository.getAllCategoryByOwnerAndDefaultCategoryTrue(testUser))
                 .thenReturn(List.of(existingDefault));
 
-        assertThatThrownBy(() -> categoryService.createDefaultsCategoryForUser(testUser))
+        assertThatThrownBy(() -> categoryService.createDefaultCategoriesForUser(testUser))
                 .isInstanceOf(DefaultCategoryExistException.class)
                 .hasMessageContaining("already exists");
     }

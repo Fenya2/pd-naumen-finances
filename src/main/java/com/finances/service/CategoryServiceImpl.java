@@ -39,7 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
                 categoryRepository.getByOwnerAndDefaultCategoryTrueAndType(user, CategoryType.INCOME);
 
         if (defaultIncomeCategory == null) {
-            throw new DefaultCategoryNotFindException("Default income category not found");
+            throw new DefaultCategoryNotFoundException("Default income category not found");
         }
 
         return defaultIncomeCategory;
@@ -51,7 +51,7 @@ public class CategoryServiceImpl implements CategoryService {
                 categoryRepository.getByOwnerAndDefaultCategoryTrueAndType(user, CategoryType.EXPENSE);
 
         if (defaultIncomeCategory == null) {
-            throw new DefaultCategoryNotFindException("Default expense category not found");
+            throw new DefaultCategoryNotFoundException("Default expense category not found");
         }
 
         return defaultIncomeCategory;
@@ -72,7 +72,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public void createDefaultsCategoryForUser(User user) {
+    public void createDefaultCategoriesForUser(User user) {
         checkDefaultsCategoryExists(user);
 
         Category newDefaultExpenseCategory = new Category("defaultExpense", user, null);
