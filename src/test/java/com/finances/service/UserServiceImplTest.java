@@ -2,6 +2,7 @@ package com.finances.service;
 
 import com.finances.model.User;
 import com.finances.repository.UserRepository;
+import com.finances.service.user.UserAlreadyExistException;
 import com.finances.service.user.UserServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+
+import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 
@@ -48,7 +51,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testUpdate() {
+    void testUpdateWhenNotExists() {
         final User user = userService.create("login", "password", "name");
         user.setLogin("newLogin");
         user.setPassword("newPassword");
@@ -58,5 +61,18 @@ class UserServiceImplTest {
         Assertions.assertEquals("newLogin", user.getLogin());
         Assertions.assertEquals("newPassword", user.getPassword());
         Assertions.assertEquals("newName", user.getName());
+    }
+
+    @Test
+    void testUpdateWhenUserWithNewLoginExists() {
+        final String oldLogin = "oldLogin";
+
+        final User updatingUser = userService.create("login", "password", "name");
+        final User oldUser = new User(oldLogin, "oldPassword", "oldName");
+
+        updatingUser.setLogin(oldLogin);
+        when(userRepository.findByLogin("oldLogin")).thenReturn(Optional.of(oldUser));
+
+        Assertions.assertThrows(UserAlreadyExistException.class, () -> userService.update(updatingUser));
     }
 }
