@@ -6,7 +6,7 @@ import com.finances.model.Category;
 import com.finances.model.Transaction;
 import com.finances.model.User;
 import com.finances.repository.TransactionRepository;
-import com.finances.service.CategoryService;
+import com.finances.service.category.CategoryService;
 import com.finances.service.account.AccountService;
 import com.finances.service.user.UserService;
 import org.junit.jupiter.api.Assertions;

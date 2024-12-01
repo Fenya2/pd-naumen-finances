@@ -1,4 +1,4 @@
-package com.finances.service;
+package com.finances.service.category;
 
 
 import com.finances.model.User;
