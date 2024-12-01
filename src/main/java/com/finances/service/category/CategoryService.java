@@ -1,5 +1,6 @@
-package com.finances.service;
+package com.finances.service.category;
 
+import com.finances.model.Goal;
 import com.finances.model.User;
 import com.finances.model.Category;
 
@@ -16,20 +17,17 @@ public interface CategoryService {
     Category create(String name, User user, Category parentCategory);
 
     /**
-     * Возвращает дефолтную категорию доходов для пользователя
+     * Возвращает дефолтную категорию для пользователя
      *
      * @param user пользователь, владелец категории
-     * @return дефолтная категория доходов пользователя или или {@link DefaultCategoryNotFoundException}
+     * @return дефолтная категория пользователя или или {@link DefaultCategoryNotFoundException}
      */
-    Category getDefaultIncomeCategoryForUser(User user);
+    Category getDefaultCategoryForUser(User user);
 
     /**
-     * Возвращает дефолтную категорию расходов для пользователя
-     *
-     * @param user пользователь, владелец категории
-     * @return дефолтная категория расходов пользователя или {@link DefaultCategoryNotFoundException}
+     * Создает категории по умолчанию для пользователя
      */
-    Category getDefaultExpenseCategoryForUser(User user);
+    void createDefaultCategoriesForUser(User user);
 
     /**
      * Возвращает категорию по id категории
@@ -47,8 +45,5 @@ public interface CategoryService {
      */
     Category findByIdSilent(long id);
 
-    /**
-     * Создает категории по умолчанию для пользователя
-     */
-    void createDefaultCategoriesForUser(User user);
+    Category getGoalCategoryByNameAndOwner(Goal goal, User user);
 }

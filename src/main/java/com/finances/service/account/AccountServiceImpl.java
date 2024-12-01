@@ -2,6 +2,7 @@ package com.finances.service.account;
 
 import com.finances.model.Account;
 import com.finances.model.Account.AccountType;
+import com.finances.model.Goal;
 import com.finances.model.User;
 import com.finances.repository.AccountRepository;
 import jakarta.transaction.Transactional;
@@ -32,6 +33,11 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.findByOwner(user).orElseThrow(() ->
                 new AccountNotFoundException("Account for user %s not found".formatted(user))
         );
+    }
+
+    @Override
+    public Account createGoalAccount(Goal goal) {
+        return null;
     }
 
     @Override

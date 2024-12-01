@@ -2,7 +2,7 @@ package com.finances.service.user;
 
 import com.finances.model.User;
 import com.finances.repository.UserRepository;
-import com.finances.service.CategoryService;
+import com.finances.service.category.CategoryService;
 import com.finances.service.account.AccountService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,7 +2,7 @@ package com.finances.service.user;
 
 import com.finances.model.User;
 import com.finances.repository.UserRepository;
-import com.finances.service.CategoryService;
+import com.finances.service.category.CategoryService;
 import com.finances.service.account.AccountService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,12 +19,6 @@ import static org.mockito.Mockito.when;
 class UserServiceImplTest {
     @Mock
     private UserRepository userRepository;
-
-    @Mock
-    private CategoryService categoryService;
-
-    @Mock
-    private AccountService accountService;
 
     @InjectMocks
     private UserServiceImpl userService;

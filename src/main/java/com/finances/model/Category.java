@@ -12,29 +12,12 @@ import lombok.Data;
 @Table(name = "tbl_category")
 public class Category
 {
-    /**
-     * Тип категории транзакций
-     */
-    public enum CategoryType {
-        /**
-         * Расхода
-         */
-        EXPENSE,
-        /**
-         * Дохода
-         */
-        INCOME
-    }
-
     public Category() {}
 
     public Category(String name, User owner, @Nullable Category parentCategory) {
         this.name = name;
         this.owner = owner;
         this.parent = parentCategory;
-
-        if (parentCategory != null)
-            this.type = parentCategory.getType();
     }
 
     @Id
@@ -52,9 +35,6 @@ public class Category
 
     @Column(nullable = false)
     private String name;
-
-    @Enumerated(EnumType.STRING)
-    private CategoryType type;
 
     private boolean defaultCategory;
 

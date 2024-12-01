@@ -6,7 +6,7 @@ import com.finances.model.Category;
 import com.finances.model.Transaction;
 import com.finances.model.User;
 import com.finances.repository.TransactionRepository;
-import com.finances.service.CategoryService;
+import com.finances.service.category.CategoryService;
 import com.finances.service.account.AccountService;
 import com.finances.service.user.UserService;
 import org.junit.jupiter.api.Assertions;
@@ -48,7 +48,8 @@ class TransactionServiceImplTest {
                 1L,
                 1L,
                 date,
-                100.0
+                100.0,
+                "desc"
         );
 
         final User user = new User();
@@ -80,17 +81,19 @@ class TransactionServiceImplTest {
                 0,
                 1L,
                 date,
-                100.0
+                100.0,
+                "desc"
         );
 
         final User user = new User();
         final Account account = new Account();
+        account.setAccountType(Account.AccountType.DEFAULT);
         final Category defaultCategory = new Category();
 
         when(userService.findById(1L)).thenReturn(user);
         when(accountService.getUserAccount(user)).thenReturn(account);
         when(categoryService.findByIdSilent(0)).thenReturn(null);
-        when(categoryService.getDefaultIncomeCategoryForUser(user)).thenReturn(defaultCategory);
+        when(categoryService.getDefaultCategoryForUser(user)).thenReturn(defaultCategory);
         when(transactionRepository.save(any())).then(invocation -> {
             Transaction transaction = invocation.getArgument(0);
             transaction.setId(1);
