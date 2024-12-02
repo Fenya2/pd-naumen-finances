@@ -11,5 +11,6 @@ public record TransactionCreateRequest(Transaction.TransactionType transactionTy
                                        long CategoryId,
                                        long userId,
                                        Date date,
-                                       double amount) {
+                                       double amount,
+                                       String description) {
 }

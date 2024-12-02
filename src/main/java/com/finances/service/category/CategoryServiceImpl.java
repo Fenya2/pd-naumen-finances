@@ -1,6 +1,7 @@
-package com.finances.service;
+package com.finances.service.category;
 
 
+import com.finances.model.Goal;
 import com.finances.model.User;
 import com.finances.model.Category;
 import com.finances.repository.CategoryRepository;
@@ -8,9 +9,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.finances.model.Category.CategoryType;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,24 +33,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category getDefaultIncomeCategoryForUser(User user) {
+    public Category getDefaultCategoryForUser(User user) {
         Category defaultIncomeCategory =
-                categoryRepository.getByOwnerAndDefaultCategoryTrueAndType(user, CategoryType.INCOME);
+                categoryRepository.getByOwnerAndDefaultCategoryTrue(user);
 
         if (defaultIncomeCategory == null) {
             throw new DefaultCategoryNotFoundException("Default income category not found");
-        }
-
-        return defaultIncomeCategory;
-    }
-
-    @Override
-    public Category getDefaultExpenseCategoryForUser(User user) {
-        Category defaultIncomeCategory =
-                categoryRepository.getByOwnerAndDefaultCategoryTrueAndType(user, CategoryType.EXPENSE);
-
-        if (defaultIncomeCategory == null) {
-            throw new DefaultCategoryNotFoundException("Default expense category not found");
         }
 
         return defaultIncomeCategory;
@@ -71,20 +58,23 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public Category getGoalCategory(Goal goal) {
+        User owner = goal.getOwner();
+        Category defaultCategory = getDefaultCategoryForUser(owner);
+        return categoryRepository.getByNameAndOwnerAndParent(goal.getName(), owner, defaultCategory).orElseThrow(
+                () -> new CategoryNotFoundException("Category with name " + goal.getName() + " not found")
+        );
+    }
+
+    @Override
     @Transactional
     public void createDefaultCategoriesForUser(User user) {
         checkDefaultsCategoryExists(user);
 
-        Category newDefaultExpenseCategory = new Category("defaultExpense", user, null);
-        newDefaultExpenseCategory.setType(Category.CategoryType.EXPENSE);
-        newDefaultExpenseCategory.setDefaultCategory(true);
+        Category newDefaultCategory = new Category("default", user, null);
+        newDefaultCategory.setDefaultCategory(true);
 
-        Category newDefaultIncomeCategory = new Category("defaultIncome", user, null);
-        newDefaultIncomeCategory.setType(Category.CategoryType.INCOME);
-        newDefaultIncomeCategory.setDefaultCategory(true);
-
-        categoryRepository.save(newDefaultExpenseCategory);
-        categoryRepository.save(newDefaultIncomeCategory);
+        categoryRepository.save(newDefaultCategory);
     }
 
     private void checkCategoryExistsForCreate(String name, User owner, Category parentCategory) {
@@ -95,8 +85,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     private void checkDefaultsCategoryExists(User owner) {
-        List<Category> allDefaultCategoryByOwner = categoryRepository.getAllCategoryByOwnerAndDefaultCategoryTrue(owner);
-        if (!allDefaultCategoryByOwner.isEmpty()) {
+        Category DefaultCategoryByOwner = categoryRepository.getByOwnerAndDefaultCategoryTrue(owner);
+        if (DefaultCategoryByOwner != null) {
             throw new DefaultCategoryExistException("Default category for " + owner.getName() + " already exists");
         }
     }

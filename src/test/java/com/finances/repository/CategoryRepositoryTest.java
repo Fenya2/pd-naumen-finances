@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,8 +19,7 @@ class CategoryRepositoryTest {
     private UserRepository userRepository;
 
     private User testUser;
-    private Category parentCategoryExpense;
-    private Category parentCategoryIncome;
+    private Category parentCategory;
 
     @BeforeEach
     void setUp() {
@@ -32,34 +30,24 @@ class CategoryRepositoryTest {
         userRepository.save(testUser);
 
         // Создаем родительскую категорию
-        parentCategoryExpense = new Category();
-        parentCategoryExpense.setName("Parent Category Expense");
-        parentCategoryExpense.setOwner(testUser);
-        parentCategoryExpense.setType(Category.CategoryType.EXPENSE);
-        parentCategoryExpense.setDefaultCategory(true);
+        parentCategory = new Category();
+        parentCategory.setName("Parent Category");
+        parentCategory.setOwner(testUser);
+        parentCategory.setDefaultCategory(true);
 
-        parentCategoryIncome = new Category();
-        parentCategoryIncome.setName("Parent Category Income");
-        parentCategoryIncome.setOwner(testUser);
-        parentCategoryIncome.setType(Category.CategoryType.INCOME);
-        parentCategoryIncome.setDefaultCategory(true);
-
-        categoryRepository.save(parentCategoryExpense);
-        categoryRepository.save(parentCategoryIncome);
+        categoryRepository.save(parentCategory);
 
         // Создаем подкатегории
         Category childCategory1 = new Category();
         childCategory1.setName("Child Category 1");
         childCategory1.setOwner(testUser);
-        childCategory1.setParent(parentCategoryExpense);
-        childCategory1.setType(Category.CategoryType.EXPENSE);
+        childCategory1.setParent(parentCategory);
         childCategory1.setDefaultCategory(false);
 
         Category childCategory2 = new Category();
         childCategory2.setName("Child Category 2");
         childCategory2.setOwner(testUser);
-        childCategory2.setParent(parentCategoryIncome);
-        childCategory2.setType(Category.CategoryType.INCOME);
+        childCategory2.setParent(parentCategory);
         childCategory2.setDefaultCategory(false);
 
         categoryRepository.save(childCategory1);
@@ -69,7 +57,7 @@ class CategoryRepositoryTest {
     @Test
     void testGetByNameAndOwnerAndParent() {
         Optional<Category> category = categoryRepository.getByNameAndOwnerAndParent(
-                "Child Category 1", testUser, parentCategoryExpense
+                "Child Category 1", testUser, parentCategory
         );
 
         assertThat(category).isPresent();
@@ -77,23 +65,18 @@ class CategoryRepositoryTest {
     }
 
     @Test
-    void testGetAllCategoryByOwnerAndDefaultCategoryTrue() {
-        List<Category> categories = categoryRepository.getAllCategoryByOwnerAndDefaultCategoryTrue(testUser);
+    void testGetCategoryByOwnerAndDefaultCategoryTrue() {
+        Category category = categoryRepository.getByOwnerAndDefaultCategoryTrue(testUser);
 
-        assertThat(categories).hasSize(2);
-        assertThat(categories.get(0).isDefaultCategory()).isTrue();
-        assertThat(categories.get(1).isDefaultCategory()).isTrue();
+        assertThat(category.isDefaultCategory()).isTrue();
     }
 
     @Test
     void testGetByOwnerAndDefaultCategoryTrueAndType() {
-        Category category = categoryRepository.getByOwnerAndDefaultCategoryTrueAndType(
-                testUser, Category.CategoryType.INCOME
-        );
+        Category category = categoryRepository.getByOwnerAndDefaultCategoryTrue(testUser);
 
         assertThat(category).isNotNull();
-        assertThat(category.getName()).isEqualTo("Parent Category Income");
+        assertThat(category.getName()).isEqualTo("Parent Category");
         assertThat(category.isDefaultCategory()).isTrue();
-        assertThat(category.getType()).isEqualTo(Category.CategoryType.INCOME);
     }
 }

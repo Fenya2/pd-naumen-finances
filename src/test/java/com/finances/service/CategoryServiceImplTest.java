@@ -3,13 +3,13 @@ package com.finances.service;
 import com.finances.model.Category;
 import com.finances.model.User;
 import com.finances.repository.CategoryRepository;
+import com.finances.service.category.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -71,41 +71,40 @@ class CategoryServiceImplTest {
     void getDefaultIncomeCategoryForUser_ShouldReturnCategory_WhenDefaultExists() {
         Category defaultIncomeCategory = new Category("Default Income", testUser, null);
         defaultIncomeCategory.setDefaultCategory(true);
-        defaultIncomeCategory.setType(Category.CategoryType.INCOME);
 
-        when(categoryRepository.getByOwnerAndDefaultCategoryTrueAndType(testUser, Category.CategoryType.INCOME))
+        when(categoryRepository.getByOwnerAndDefaultCategoryTrue(testUser))
                 .thenReturn(defaultIncomeCategory);
 
-        Category result = categoryService.getDefaultIncomeCategoryForUser(testUser);
+        Category result = categoryService.getDefaultCategoryForUser(testUser);
 
         assertThat(result).isEqualTo(defaultIncomeCategory);
     }
 
     @Test
     void getDefaultIncomeCategoryForUser_ShouldThrowException_WhenDefaultNotFound() {
-        when(categoryRepository.getByOwnerAndDefaultCategoryTrueAndType(testUser, Category.CategoryType.INCOME))
+        when(categoryRepository.getByOwnerAndDefaultCategoryTrue(testUser))
                 .thenReturn(null);
 
-        assertThatThrownBy(() -> categoryService.getDefaultIncomeCategoryForUser(testUser))
+        assertThatThrownBy(() -> categoryService.getDefaultCategoryForUser(testUser))
                 .isInstanceOf(DefaultCategoryNotFoundException.class)
                 .hasMessageContaining("Default income category not found");
     }
 
     @Test
     void createDefaultsCategoryForUser_ShouldCreateDefaultCategories_WhenNoneExist() {
-        when(categoryRepository.getAllCategoryByOwnerAndDefaultCategoryTrue(testUser))
-                .thenReturn(List.of());
+        when(categoryRepository.getByOwnerAndDefaultCategoryTrue(testUser))
+                .thenReturn(null);
 
         categoryService.createDefaultCategoriesForUser(testUser);
 
-        verify(categoryRepository, times(2)).save(any(Category.class));
+        verify(categoryRepository, times(1)).save(any(Category.class));
     }
 
     @Test
     void createDefaultsCategoryForUser_ShouldThrowException_WhenDefaultsExist() {
         Category existingDefault = new Category("Default", testUser, null);
-        when(categoryRepository.getAllCategoryByOwnerAndDefaultCategoryTrue(testUser))
-                .thenReturn(List.of(existingDefault));
+        when(categoryRepository.getByOwnerAndDefaultCategoryTrue(testUser))
+                .thenReturn(existingDefault);
 
         assertThatThrownBy(() -> categoryService.createDefaultCategoriesForUser(testUser))
                 .isInstanceOf(DefaultCategoryExistException.class)

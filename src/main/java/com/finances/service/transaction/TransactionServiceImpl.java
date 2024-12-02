@@ -8,12 +8,14 @@ import com.finances.model.Transaction;
 import com.finances.model.Transaction.TransactionType;
 import com.finances.model.User;
 import com.finances.repository.TransactionRepository;
-import com.finances.service.CategoryService;
+import com.finances.service.category.CategoryService;
 import com.finances.service.account.AccountService;
 import com.finances.service.user.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -47,23 +49,62 @@ public class TransactionServiceImpl implements TransactionService {
         switch(transactionType) {
             case INCOME -> {
                 accountService.deposit(account, amount);
-                if(category == null) {
-                    transaction.setCategory(categoryService.getDefaultIncomeCategoryForUser(user));
-                }
                 transaction.setTransactionType(TransactionType.INCOME);
             }
             case EXPENSE -> {
                 accountService.withdraw(account, amount);
-                if(category == null) {
-                    transaction.setCategory(categoryService.getDefaultExpenseCategoryForUser(user));
-                }
                 transaction.setTransactionType(TransactionType.EXPENSE);
             }
             default -> throw new TransactionServiceException("invalid transaction type " + transactionType);
         }
+
+        if(category == null && account.getAccountType().equals(Account.AccountType.DEFAULT)) {
+            transaction.setCategory(categoryService.getDefaultCategoryForUser(user));
+        }
         transaction.setAccount(account);
         transaction.setAmount(transactionCreateRequest.amount());
         transaction.setDate(transactionCreateRequest.date());
+        transaction.setDescription(transactionCreateRequest.description());
         return transactionRepository.save(transaction);
+    }
+
+    @Override
+    public Transaction createTransaction(Account account,
+                                         Category category,
+                                         TransactionType transactionType,
+                                         Date date,
+                                         double amount,
+                                         String description) {
+        final Transaction transaction = new Transaction();
+        final User user = account.getOwner();
+
+        transaction.setCategory(category);
+
+        switch(transactionType) {
+            case INCOME -> {
+                accountService.deposit(account, amount);
+                transaction.setTransactionType(TransactionType.INCOME);
+            }
+            case EXPENSE -> {
+                accountService.withdraw(account, amount);
+                transaction.setTransactionType(TransactionType.EXPENSE);
+            }
+            default -> throw new TransactionServiceException("invalid transaction type " + transactionType);
+        }
+
+        if(category == null && account.getAccountType().equals(Account.AccountType.DEFAULT)) {
+            transaction.setCategory(categoryService.getDefaultCategoryForUser(user));
+        }
+        transaction.setAccount(account);
+        transaction.setAmount(amount);
+        transaction.setDate(date);
+        transaction.setDescription(description);
+        return transactionRepository.save(transaction);
+    }
+
+
+    @Override
+    public Transaction createInboundTransaction(Account from, Account to, double amount) {
+        return null;
     }
 }

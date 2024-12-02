@@ -1,6 +1,7 @@
 package com.finances.service.account;
 
 import com.finances.model.Account;
+import com.finances.model.Goal;
 import com.finances.model.User;
 
 public interface AccountService {
@@ -14,6 +15,11 @@ public interface AccountService {
      * Возвращает основной счет пользователя
      */
     Account getUserAccount(User user);
+
+    /**
+     * Создаёт счёт для цели
+     */
+    Account createGoalAccount(Goal goal);
 
     /**
      * Вносит указанную сумму на указанный счет

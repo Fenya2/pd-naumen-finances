@@ -2,7 +2,7 @@ package com.finances.service.user;
 
 import com.finances.model.User;
 import com.finances.repository.UserRepository;
-import com.finances.service.CategoryService;
+import com.finances.service.category.CategoryService;
 import com.finances.service.account.AccountService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User create(String login, String password, String name) {
         checkLoginNotExist(login);
-        checkPasswordCorect(password);
+        checkPasswordCorrect(password);
 
         final User user = new User(login, password, name);
         userRepository.save(user);
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
                 throw new UserAlreadyExistException("User with login " + user.getLogin() + " already exists");
             }
         });
-        checkPasswordCorect(user.getPassword());
+        checkPasswordCorrect(user.getPassword());
         userRepository.save(user);
     }
 
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private static void checkPasswordCorect(final String password) {
+    private static void checkPasswordCorrect(final String password) {
         final boolean isValid = PasswordValidationHelper.isPasswordValid(password);
         if(!isValid) {
             throw new InvalidPasswordException("Password %s is not valid due to security reason");
