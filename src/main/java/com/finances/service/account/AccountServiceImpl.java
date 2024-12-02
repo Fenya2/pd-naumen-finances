@@ -8,6 +8,8 @@ import com.finances.repository.AccountRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AccountServiceImpl implements AccountService {
 
@@ -20,7 +22,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @Transactional
     public Account createUserAccount(User user) {
-        checkAccountIsNotExist(user);
+        checkUserAccountIsNotExist(user);
         Account account = new Account();
         account.setOwner(user);
         account.setAccountType(AccountType.DEFAULT);
@@ -30,14 +32,21 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account getUserAccount(User user) {
-        return accountRepository.findByOwner(user).orElseThrow(() ->
+        return accountRepository.getByOwner(user).orElseThrow(() ->
                 new AccountNotFoundException("Account for user %s not found".formatted(user))
         );
     }
 
     @Override
     public Account createGoalAccount(Goal goal) {
-        return null;
+        checkGoalAccountIsNotExist(goal);
+        final Account account = new Account();
+        account.setOwner(goal.getOwner());
+        account.setAccountType(AccountType.GOAL);
+        account.setBalance(0.0);
+        goal.setAccount(account);
+        accountRepository.save(account);
+        return account;
     }
 
     @Override
@@ -64,9 +73,22 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.save(account);
     }
 
-    private void checkAccountIsNotExist(User user) {
-        if(accountRepository.findByOwner(user).isPresent()) {
+    private void checkUserAccountIsNotExist(User user) {
+        if(accountRepository.getByOwner(user).isPresent()) {
             throw new AccountAlreadyExistException("Account for user %s already exist".formatted(user));
+        }
+    }
+
+    private void checkGoalAccountIsNotExist(Goal goal) {
+        final Account goalAccount = goal.getAccount();
+        if (goalAccount == null) {
+            return;
+        }
+        Optional<Account> optionalAccount = accountRepository.findById(goalAccount.getId());
+        if (optionalAccount.isPresent()) {
+            final Account account = optionalAccount.get();
+            throw new AccountAlreadyExistException(
+                    "Account %s for goal %s already exist".formatted(account.getId(), goal.getId()));
         }
     }
 }

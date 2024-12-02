@@ -17,7 +17,7 @@ public interface AccountService {
     Account getUserAccount(User user);
 
     /**
-     * Создаёт счёт для цели
+     * Создаёт счёт для цели. Возвращает связанный с целью счет
      */
     Account createGoalAccount(Goal goal);
 

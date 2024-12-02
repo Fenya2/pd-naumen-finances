@@ -10,5 +10,5 @@ public interface AccountRepository extends CrudRepository<Account, Long> {
     /**
      * Возвращает основной счет пользователя
      */
-    Optional<Account> findByOwner(User owner);
+    Optional<Account> getByOwner(User owner);
 }
