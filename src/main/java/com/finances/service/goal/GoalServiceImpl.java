@@ -49,18 +49,18 @@ public class GoalServiceImpl implements GoalService {
         final Account goalAccount = goal.getAccount();
         final Account userAccount = accountService.getUserAccount(user);
 
-        Category category = categoryService.getGoalCategoryByNameAndOwner(goal, user);
+        Category category = categoryService.getGoalCategoryByName(goal);
 
         transactionService.createTransaction(userAccount, category, TransactionType.EXPENSE, date, amount, null);
         transactionService.createTransaction(goalAccount, null, TransactionType.INCOME, date, amount, null);
     }
 
     @Override
-    public void depositFromGoalToUser(Goal goal, User user, Date date, double amount) {
+    public void withdrawFromGoalToUser(Goal goal, User user, Date date, double amount) {
         final Account goalAccount = goal.getAccount();
         final Account userAccount = accountService.getUserAccount(user);
 
-        Category category = categoryService.getGoalCategoryByNameAndOwner(goal, user);
+        Category category = categoryService.getGoalCategoryByName(goal);
 
         transactionService.createTransaction(goalAccount, null, TransactionType.EXPENSE, date, amount, null);
         transactionService.createTransaction(userAccount, category, TransactionType.INCOME, date, amount, null);

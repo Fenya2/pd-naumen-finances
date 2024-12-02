@@ -66,7 +66,7 @@ class CategoryRepositoryTest {
 
     @Test
     void testGetCategoryByOwnerAndDefaultCategoryTrue() {
-        Category category = categoryRepository.getCategoryByOwnerAndDefaultCategoryTrue(testUser);
+        Category category = categoryRepository.getByOwnerAndDefaultCategoryTrue(testUser);
 
         assertThat(category.isDefaultCategory()).isTrue();
     }

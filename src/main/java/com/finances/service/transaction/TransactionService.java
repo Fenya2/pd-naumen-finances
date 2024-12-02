@@ -19,7 +19,7 @@ public interface TransactionService {
      */
     Transaction createTransaction(TransactionCreateRequest transactionCreateRequest);
 
-    Transaction createTransaction(Account owner,
+    Transaction createTransaction(Account account,
                                   Category category,
                                   TransactionType transactionType,
                                   Date date,

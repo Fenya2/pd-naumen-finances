@@ -20,6 +20,12 @@ class UserServiceImplTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private CategoryService categoryService;
+
+    @Mock
+    private AccountService accountService;
+
     @InjectMocks
     private UserServiceImpl userService;
 

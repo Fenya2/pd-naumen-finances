@@ -58,9 +58,10 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category getGoalCategoryByNameAndOwner(Goal goal, User user) {
-        Category defaultCategory = getDefaultCategoryForUser(user);
-        return categoryRepository.getByNameAndOwnerAndParent(goal.getName(), user, defaultCategory).orElseThrow(
+    public Category getGoalCategoryByName(Goal goal) {
+        User owner = goal.getOwner();
+        Category defaultCategory = getDefaultCategoryForUser(owner);
+        return categoryRepository.getByNameAndOwnerAndParent(goal.getName(), owner, defaultCategory).orElseThrow(
                 () -> new CategoryNotFoundException("Category with name " + goal.getName() + " not found")
         );
     }
@@ -84,7 +85,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     private void checkDefaultsCategoryExists(User owner) {
-        Category DefaultCategoryByOwner = categoryRepository.getCategoryByOwnerAndDefaultCategoryTrue(owner);
+        Category DefaultCategoryByOwner = categoryRepository.getByOwnerAndDefaultCategoryTrue(owner);
         if (DefaultCategoryByOwner != null) {
             throw new DefaultCategoryExistException("Default category for " + owner.getName() + " already exists");
         }

@@ -92,7 +92,7 @@ class CategoryServiceImplTest {
 
     @Test
     void createDefaultsCategoryForUser_ShouldCreateDefaultCategories_WhenNoneExist() {
-        when(categoryRepository.getCategoryByOwnerAndDefaultCategoryTrue(testUser))
+        when(categoryRepository.getByOwnerAndDefaultCategoryTrue(testUser))
                 .thenReturn(null);
 
         categoryService.createDefaultCategoriesForUser(testUser);
@@ -103,7 +103,7 @@ class CategoryServiceImplTest {
     @Test
     void createDefaultsCategoryForUser_ShouldThrowException_WhenDefaultsExist() {
         Category existingDefault = new Category("Default", testUser, null);
-        when(categoryRepository.getCategoryByOwnerAndDefaultCategoryTrue(testUser))
+        when(categoryRepository.getByOwnerAndDefaultCategoryTrue(testUser))
                 .thenReturn(existingDefault);
 
         assertThatThrownBy(() -> categoryService.createDefaultCategoriesForUser(testUser))

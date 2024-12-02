@@ -45,5 +45,5 @@ public interface CategoryService {
      */
     Category findByIdSilent(long id);
 
-    Category getGoalCategoryByNameAndOwner(Goal goal, User user);
+    Category getGoalCategoryByName(Goal goal);
 }

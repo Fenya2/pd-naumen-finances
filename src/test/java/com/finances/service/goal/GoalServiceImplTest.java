@@ -60,7 +60,7 @@ class GoalServiceImplTest {
     @Test
     void createGoal_ShouldCreateGoalWithAccountAndCategory() {
         when(categoryService.getDefaultCategoryForUser(user)).thenReturn(goalCategory);
-        when(accountService.createGoalAccount(goal)).thenReturn(goalAccount);
+        when(accountService.createGoalAccount(any(Goal.class))).thenReturn(goalAccount);
         when(goalRepository.save(any(Goal.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Goal createdGoal = goalService.createGoal(user, "Vacation", 1000.0, new Date());
@@ -70,14 +70,14 @@ class GoalServiceImplTest {
         assertEquals(goalAccount, createdGoal.getAccount());
 
         verify(categoryService).create(eq("Vacation"), eq(user), eq(goalCategory));
-        verify(accountService).createGoalAccount(goal);
+        verify(accountService).createGoalAccount(createdGoal);
         verify(goalRepository).save(createdGoal);
     }
 
     @Test
     void depositFromUserToGoal_ShouldCreateExpenseAndIncomeTransactions() {
         when(accountService.getUserAccount(user)).thenReturn(userAccount);
-        when(categoryService.getGoalCategoryByNameAndOwner(goal, user)).thenReturn(goalCategory);
+        when(categoryService.getGoalCategoryByName(goal)).thenReturn(goalCategory);
 
         Date date = new Date();
         double amount = 100.0;
@@ -89,14 +89,14 @@ class GoalServiceImplTest {
     }
 
     @Test
-    void depositFromGoalToUser_ShouldCreateExpenseAndIncomeTransactions() {
+    void withdrawFromGoalToUser_ShouldCreateExpenseAndIncomeTransactions() {
         when(accountService.getUserAccount(user)).thenReturn(userAccount);
-        when(categoryService.getGoalCategoryByNameAndOwner(goal, user)).thenReturn(goalCategory);
+        when(categoryService.getGoalCategoryByName(goal)).thenReturn(goalCategory);
 
         Date date = new Date();
         double amount = 50.0;
 
-        goalService.depositFromGoalToUser(goal, user, date, amount);
+        goalService.withdrawFromGoalToUser(goal, user, date, amount);
 
         verify(transactionService).createTransaction(eq(goalAccount), isNull(), eq(TransactionType.EXPENSE), eq(date), eq(amount), isNull());
         verify(transactionService).createTransaction(eq(userAccount), eq(goalCategory), eq(TransactionType.INCOME), eq(date), eq(amount), isNull());

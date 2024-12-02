@@ -9,6 +9,5 @@ import java.util.Optional;
 
 public interface CategoryRepository extends CrudRepository<Category, Long> {
     Optional<Category> getByNameAndOwnerAndParent(String name, User user, @Nonnull Category parent);
-    Category getCategoryByOwnerAndDefaultCategoryTrue(User user);
     Category getByOwnerAndDefaultCategoryTrue(User user);
 }
