@@ -77,7 +77,7 @@ class GoalServiceImplTest {
     @Test
     void depositFromUserToGoal_ShouldCreateExpenseAndIncomeTransactions() {
         when(accountService.getUserAccount(user)).thenReturn(userAccount);
-        when(categoryService.getGoalCategoryByName(goal)).thenReturn(goalCategory);
+        when(categoryService.getGoalCategory(goal)).thenReturn(goalCategory);
 
         Date date = new Date();
         double amount = 100.0;
@@ -91,7 +91,7 @@ class GoalServiceImplTest {
     @Test
     void withdrawFromGoalToUser_ShouldCreateExpenseAndIncomeTransactions() {
         when(accountService.getUserAccount(user)).thenReturn(userAccount);
-        when(categoryService.getGoalCategoryByName(goal)).thenReturn(goalCategory);
+        when(categoryService.getGoalCategory(goal)).thenReturn(goalCategory);
 
         Date date = new Date();
         double amount = 50.0;

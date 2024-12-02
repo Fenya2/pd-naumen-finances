@@ -49,7 +49,7 @@ public class GoalServiceImpl implements GoalService {
         final Account goalAccount = goal.getAccount();
         final Account userAccount = accountService.getUserAccount(user);
 
-        Category category = categoryService.getGoalCategoryByName(goal);
+        Category category = categoryService.getGoalCategory(goal);
 
         transactionService.createTransaction(userAccount, category, TransactionType.EXPENSE, date, amount, null);
         transactionService.createTransaction(goalAccount, null, TransactionType.INCOME, date, amount, null);
@@ -60,7 +60,7 @@ public class GoalServiceImpl implements GoalService {
         final Account goalAccount = goal.getAccount();
         final Account userAccount = accountService.getUserAccount(user);
 
-        Category category = categoryService.getGoalCategoryByName(goal);
+        Category category = categoryService.getGoalCategory(goal);
 
         transactionService.createTransaction(goalAccount, null, TransactionType.EXPENSE, date, amount, null);
         transactionService.createTransaction(userAccount, category, TransactionType.INCOME, date, amount, null);

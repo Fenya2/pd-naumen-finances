@@ -58,7 +58,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category getGoalCategoryByName(Goal goal) {
+    public Category getGoalCategory(Goal goal) {
         User owner = goal.getOwner();
         Category defaultCategory = getDefaultCategoryForUser(owner);
         return categoryRepository.getByNameAndOwnerAndParent(goal.getName(), owner, defaultCategory).orElseThrow(
