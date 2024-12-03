@@ -4,6 +4,7 @@ import com.finances.model.Goal;
 import com.finances.model.User;
 
 import java.util.Date;
+import java.util.List;
 
 public interface GoalService {
     Goal createGoal(User user, String name, double amount, Date date);
@@ -11,4 +12,5 @@ public interface GoalService {
     void withdrawFromGoalToUser(Goal goal, User user, Date date, double amount);
     void depositFromGoalToGoal(Goal goalFrom, Goal goalTo, Date date, double amount);
     Goal findById(long id);
+    List<Goal> getAllGoalsForUser(User user);
 }

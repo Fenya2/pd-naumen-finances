@@ -1,11 +1,10 @@
-package com.finances.dto.category;
+package com.finances.dto.goal;
 
 import java.util.Date;
 
-public record CategoryDTO(long id,
+public record GoalGetResponse(long id,
                           long idOwner,
                           String name,
                           double amount,
                           Date date,
-                          long idAccount) {
-}
+                          long idAccount) {}
