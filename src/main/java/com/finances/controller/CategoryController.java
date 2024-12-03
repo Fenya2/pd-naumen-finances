@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/transaction")
+@RequestMapping(value = "/category")
 public class CategoryController {
     private final CategoryService categoryService;
     private final UserService userService;
