@@ -10,6 +10,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,6 +31,11 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.save(newCategory);
 
         return newCategory;
+    }
+
+    @Override
+    public Category save(Category category) {
+        return categoryRepository.save(category);
     }
 
     @Override
@@ -75,6 +81,11 @@ public class CategoryServiceImpl implements CategoryService {
         newDefaultCategory.setDefaultCategory(true);
 
         categoryRepository.save(newDefaultCategory);
+    }
+
+    @Override
+    public List<Category> getChildrenCategoriesForCategory(Category category) {
+        return categoryRepository.getByOwnerAndParent(category.getOwner(), category);
     }
 
     private void checkCategoryExistsForCreate(String name, User owner, Category parentCategory) {

@@ -4,6 +4,8 @@ import com.finances.model.Goal;
 import com.finances.model.User;
 import com.finances.model.Category;
 
+import java.util.List;
+
 public interface CategoryService {
     /**
      * Создаёт категорию с именем {@param name} для пользователя {@param user}
@@ -17,6 +19,14 @@ public interface CategoryService {
     Category create(String name, User user, Category parentCategory);
 
     /**
+     * Сохраняет обновления для существующей категории
+     *
+     * @param category - категория для сохранения
+     * @return сохранённая категория
+     */
+    Category save(Category category);
+
+    /**
      * Возвращает дефолтную категорию для пользователя
      *
      * @param user пользователь, владелец категории
@@ -28,6 +38,14 @@ public interface CategoryService {
      * Создает категории по умолчанию для пользователя
      */
     void createDefaultCategoriesForUser(User user);
+
+    /**
+     * Возвращает список дочерних категорий для конкретной
+     *
+     * @param category - родительская категория
+     * @return - список дочерних категорий для родительской
+     */
+    List<Category> getChildrenCategoriesForCategory(Category category);
 
     /**
      * Возвращает категорию по id категории
