@@ -63,7 +63,7 @@ public class GoalController {
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Exception exceptionUserNotFound(Exception e) {
-        Exception exception = new Exception("User not found");
+        Exception exception = new Exception(e.getMessage());
         exception.setStackTrace(Arrays.stream(e.getStackTrace()).limit(5).toArray(StackTraceElement[]::new));
         return exception;
     }
@@ -71,7 +71,7 @@ public class GoalController {
     @ExceptionHandler(GoalNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Exception exceptionGoalNotFound(Exception e) {
-        Exception exception = new Exception("Goal not found");
+        Exception exception = new Exception(e.getMessage());
         exception.setStackTrace(Arrays.stream(e.getStackTrace()).limit(5).toArray(StackTraceElement[]::new));
         return exception;
     }
@@ -79,7 +79,7 @@ public class GoalController {
     @ExceptionHandler(DefaultCategoryNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Exception exceptionDefaultCategoryNotFound(Exception e) {
-        Exception exception = new Exception("Default category not found");
+        Exception exception = new Exception(e.getMessage());
         exception.setStackTrace(Arrays.stream(e.getStackTrace()).limit(5).toArray(StackTraceElement[]::new));
         return exception;
     }
@@ -87,7 +87,7 @@ public class GoalController {
     @ExceptionHandler(GoalAlreadyExistException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public Exception exceptionGoalAlreadyExist(Exception e) {
-        Exception exception = new Exception("Goal already exist");
+        Exception exception = new Exception(e.getMessage());
         exception.setStackTrace(Arrays.stream(e.getStackTrace()).limit(5).toArray(StackTraceElement[]::new));
         return exception;
     }
@@ -95,7 +95,7 @@ public class GoalController {
     @ExceptionHandler(CategoryAlreadyExistException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public Exception exceptionCategoryAlreadyExist(Exception e) {
-        Exception exception = new Exception("Category already exist");
+        Exception exception = new Exception(e.getMessage());
         exception.setStackTrace(Arrays.stream(e.getStackTrace()).limit(5).toArray(StackTraceElement[]::new));
         return exception;
     }
@@ -103,7 +103,7 @@ public class GoalController {
     @ExceptionHandler(CategoryAlreadyExistException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Exception exceptionIllegalArgumentException(Exception e) {
-        Exception exception = new Exception("Something went wrong");
+        Exception exception = new Exception(e.getMessage());
         exception.setStackTrace(Arrays.stream(e.getStackTrace()).limit(5).toArray(StackTraceElement[]::new));
         return exception;
     }

@@ -75,7 +75,7 @@ public class CategoryController {
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Exception exceptionUserNotFound(Exception e) {
-        Exception exception = new Exception("User not found");
+        Exception exception = new Exception(e.getMessage());
         exception.setStackTrace(Arrays.stream(e.getStackTrace()).limit(5).toArray(StackTraceElement[]::new));
         return exception;
     }
@@ -83,7 +83,7 @@ public class CategoryController {
     @ExceptionHandler(CategoryNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Exception exceptionCategoryNotFound(Exception e) {
-        Exception exception = new Exception("Category not found");
+        Exception exception = new Exception(e.getMessage());
         exception.setStackTrace(Arrays.stream(e.getStackTrace()).limit(5).toArray(StackTraceElement[]::new));
         return exception;
     }
@@ -91,7 +91,7 @@ public class CategoryController {
     @ExceptionHandler(DefaultCategoryNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Exception exceptionDefaultCategoryNotFound(Exception e) {
-        Exception exception = new Exception("Default category not found");
+        Exception exception = new Exception(e.getMessage());
         exception.setStackTrace(Arrays.stream(e.getStackTrace()).limit(5).toArray(StackTraceElement[]::new));
         return exception;
     }
@@ -99,7 +99,7 @@ public class CategoryController {
     @ExceptionHandler(CategoryAlreadyExistException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public Exception exceptionCategoryAlreadyExist(Exception e) {
-        Exception exception = new Exception("Category already exist");
+        Exception exception = new Exception(e.getMessage());
         exception.setStackTrace(Arrays.stream(e.getStackTrace()).limit(5).toArray(StackTraceElement[]::new));
         return exception;
     }
@@ -107,7 +107,7 @@ public class CategoryController {
     @ExceptionHandler(DefaultCategoryExistException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public Exception exceptionDefaultCategoryAlreadyExist(Exception e) {
-        Exception exception = new Exception("Default category already exist");
+        Exception exception = new Exception(e.getMessage());
         exception.setStackTrace(Arrays.stream(e.getStackTrace()).limit(5).toArray(StackTraceElement[]::new));
         return exception;
     }
