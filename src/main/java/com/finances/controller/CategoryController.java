@@ -25,7 +25,7 @@ public class CategoryController {
         this.userService = userService;
     }
 
-    @GetMapping(value = "/base")
+    @GetMapping(value = "/root")
     @ResponseStatus(HttpStatus.OK)
     public CategoryGetResponse getDefaultCategory(@RequestParam int idUser) {
         User user = userService.findById(idUser);

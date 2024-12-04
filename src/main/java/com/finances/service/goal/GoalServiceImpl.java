@@ -4,7 +4,6 @@ import com.finances.model.*;
 import com.finances.model.Transaction.TransactionType;
 import com.finances.repository.GoalRepository;
 import com.finances.service.account.AccountService;
-import com.finances.service.category.CategoryAlreadyExistException;
 import com.finances.service.category.CategoryService;
 import com.finances.service.transaction.TransactionService;
 import jakarta.transaction.Transactional;
@@ -44,8 +43,8 @@ public class GoalServiceImpl implements GoalService {
         categoryService.create(name, user,
                 categoryService.getDefaultCategoryForUser(user));
 
-        final Account goalAccount = accountService.createGoalAccount(goal);
-        goal.setAccount(goalAccount);
+        accountService.createGoalAccount(goal);
+
         return goalRepository.save(goal);
     }
 
