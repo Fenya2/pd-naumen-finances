@@ -29,14 +29,14 @@ public class GoalController {
         this.userService = userService;
     }
 
-    @GetMapping()
+    @GetMapping(value = "/id")
     @ResponseStatus(HttpStatus.OK)
     public GoalGetResponse getGoal(@RequestParam long idGoal) {
         Goal goal = goalService.findById(idGoal);
         return GoalMapper.toGoalGetResponse(goal);
     }
 
-    @GetMapping()
+    @GetMapping(value = "/user")
     @ResponseStatus(HttpStatus.OK)
     public GoalsForUserGetResponse getGoalsForUser(@RequestParam long idUser) {
         User user = userService.findById(idUser);
