@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GoalServiceImpl implements GoalService {
@@ -34,17 +36,22 @@ public class GoalServiceImpl implements GoalService {
     @Override
     @Transactional
     public Goal createGoal(User user, String name, double amount, Date date) {
+        checkGoalExistsForCreate(name, user);
+        checkDate(date);
+        checkAmount(amount);
+
         final Goal goal = new Goal(user, name, amount, date);
 
         categoryService.create(name, user,
                 categoryService.getDefaultCategoryForUser(user));
 
-        final Account goalAccount = accountService.createGoalAccount(goal);
-        goal.setAccount(goalAccount);
+        accountService.createGoalAccount(goal);
+
         return goalRepository.save(goal);
     }
 
     @Override
+    @Transactional
     public void depositFromUserToGoal(User user, Goal goal, Date date, double amount) {
         final Account goalAccount = goal.getAccount();
         final Account userAccount = accountService.getUserAccount(user);
@@ -56,6 +63,7 @@ public class GoalServiceImpl implements GoalService {
     }
 
     @Override
+    @Transactional
     public void withdrawFromGoalToUser(Goal goal, User user, Date date, double amount) {
         final Account goalAccount = goal.getAccount();
         final Account userAccount = accountService.getUserAccount(user);
@@ -67,6 +75,7 @@ public class GoalServiceImpl implements GoalService {
     }
 
     @Override
+    @Transactional
     public void depositFromGoalToGoal(Goal goalFrom, Goal goalTo, Date date, double amount) {
         final Account goalAccountFrom = goalFrom.getAccount();
         final Account goalAccountTo = goalTo.getAccount();
@@ -81,5 +90,36 @@ public class GoalServiceImpl implements GoalService {
                 .orElseThrow(
                         () -> new GoalNotFoundException("Goal with id " + id + " not found")
                 );
+    }
+
+    @Override
+    public List<Goal> getAllGoalsForUser(User user) {
+        return goalRepository.getAllByOwner(user);
+    }
+
+    private void checkGoalExistsForCreate(String name, User owner) {
+        Optional<Goal> goal = goalRepository.getByNameAndOwner(name, owner);
+        if (goal.isPresent()) {
+            throw new GoalAlreadyExistException("Goal with name " + name + " already exists");
+        }
+    }
+
+    private void checkAmount(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount must be greater than 0");
+        }
+        if (Double.isNaN(amount) || Double.isInfinite(amount)) {
+            throw new IllegalArgumentException("Amount must be a valid number");
+        }
+    }
+
+    private void checkDate(Date date) {
+        if (date == null) {
+            throw new IllegalArgumentException("Date cannot be null");
+        }
+        Date today = new Date();
+        if (date.before(today)) {
+            throw new IllegalArgumentException("Date cannot be in the past");
+        }
     }
 }

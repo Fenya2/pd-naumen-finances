@@ -5,11 +5,11 @@ import com.finances.model.Goal;
 import com.finances.model.User;
 import com.finances.model.Category;
 import com.finances.repository.CategoryRepository;
-import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,13 +23,20 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public Category create(String name, User owner, @Nonnull Category parentCategory) {
+    public Category create(String name, User owner, Category parentCategory) {
         checkCategoryExistsForCreate(name, owner, parentCategory);
 
         Category newCategory = new Category(name, owner, parentCategory);
         categoryRepository.save(newCategory);
 
         return newCategory;
+    }
+
+    @Override
+    public Category save(Category category) {
+        checkCorrectCategory(category);
+
+        return categoryRepository.save(category);
     }
 
     @Override
@@ -75,6 +82,24 @@ public class CategoryServiceImpl implements CategoryService {
         newDefaultCategory.setDefaultCategory(true);
 
         categoryRepository.save(newDefaultCategory);
+    }
+
+    @Override
+    public List<Category> getChildrenCategoriesForCategory(Category category) {
+        return categoryRepository.getByOwnerAndParent(category.getOwner(), category);
+    }
+
+    private void checkCorrectCategory(Category category) {
+        Optional<Category> optionalCategory = categoryRepository.findById(category.getId());
+        if (optionalCategory.isPresent()) {
+            throw new CategoryAlreadyExistException("Category with id " + category.getId() + " already exists");
+        }
+
+        Optional<Category> optionalCategory1 = categoryRepository.getByNameAndOwnerAndParent(category.getName(),
+                category.getOwner(), category.getParent());
+        if (optionalCategory1.isPresent()) {
+            throw new CategoryAlreadyExistException("Category with name " + category.getName() + " already exists");
+        }
     }
 
     private void checkCategoryExistsForCreate(String name, User owner, Category parentCategory) {

@@ -10,8 +10,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "tbl_category")
-public class Category
-{
+public class Category {
     public Category() {}
 
     public Category(String name, User owner, @Nullable Category parentCategory) {
