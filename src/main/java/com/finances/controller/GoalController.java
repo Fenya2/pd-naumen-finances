@@ -99,5 +99,13 @@ public class GoalController {
         exception.setStackTrace(Arrays.stream(e.getStackTrace()).limit(5).toArray(StackTraceElement[]::new));
         return exception;
     }
+
+    @ExceptionHandler(CategoryAlreadyExistException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Exception exceptionIllegalArgumentException(Exception e) {
+        Exception exception = new Exception("Something went wrong");
+        exception.setStackTrace(Arrays.stream(e.getStackTrace()).limit(5).toArray(StackTraceElement[]::new));
+        return exception;
+    }
 }
 

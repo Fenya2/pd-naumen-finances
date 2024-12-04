@@ -37,6 +37,8 @@ public class GoalServiceImpl implements GoalService {
     @Transactional
     public Goal createGoal(User user, String name, double amount, Date date) {
         checkGoalExistsForCreate(name, user);
+        checkDate(date);
+        checkAmount(amount);
 
         final Goal goal = new Goal(user, name, amount, date);
 
@@ -99,6 +101,25 @@ public class GoalServiceImpl implements GoalService {
         Optional<Goal> goal = goalRepository.getByNameAndOwner(name, owner);
         if (goal.isPresent()) {
             throw new GoalAlreadyExistException("Goal with name " + name + " already exists");
+        }
+    }
+
+    private void checkAmount(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount must be greater than 0");
+        }
+        if (Double.isNaN(amount) || Double.isInfinite(amount)) {
+            throw new IllegalArgumentException("Amount must be a valid number");
+        }
+    }
+
+    private void checkDate(Date date) {
+        if (date == null) {
+            throw new IllegalArgumentException("Date cannot be null");
+        }
+        Date today = new Date();
+        if (date.before(today)) {
+            throw new IllegalArgumentException("Date cannot be in the past");
         }
     }
 }
