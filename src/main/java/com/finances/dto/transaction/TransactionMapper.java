@@ -11,16 +11,6 @@ public class TransactionMapper {
         throw new UnsupportedOperationException();
     }
 
-    public static TransactionDTO toDTO(Transaction transaction) {
-        return new TransactionDTO(
-                transaction.getId(),
-                transaction.getType(),
-                transaction.getCategory().getId(),
-                transaction.getDescription(),
-                transaction.getAmount()
-        );
-    }
-
     public static TransactionCreateResponse toCreatedResponse(Transaction transaction) {
         return new TransactionCreateResponse(transaction.getId(), transaction.getDescription());
     }
