@@ -2,10 +2,16 @@ package com.finances.controller;
 
 import com.finances.dto.analyze.CategoryExpenseReport;
 import com.finances.dto.analyze.CategoryIncomeReport;
+import com.finances.security.GlobalUserValidator;
 import com.finances.service.analyze.AnalyzeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -15,6 +21,7 @@ import java.util.List;
 public class AnalyzeController {
 
     private final AnalyzeService analyzeService;
+    private final GlobalUserValidator globalUserValidator;
 
     /**
      * Получить расходы по категориям за текущий месяц у пользователя с переданным id
@@ -23,7 +30,8 @@ public class AnalyzeController {
      * @return список отчетов о расходах по категориям
      */
     @GetMapping("/current-month/expenses")
-    public List<CategoryExpenseReport> getCurrentMonthExpenses(@RequestParam long userId) {
+    public List<CategoryExpenseReport> getCurrentMonthExpenses(Authentication authentication, @RequestParam long userId) throws AccessDeniedException {
+        globalUserValidator.checkUserIsValid(authentication, userId);
         return analyzeService.getCurrentMonthExpenses(userId);
     }
 
@@ -34,7 +42,8 @@ public class AnalyzeController {
      * @return список отчетов о доходах по категориям
      */
     @GetMapping("/current-month/income")
-    public List<CategoryIncomeReport> getCurrentMonthIncome(@RequestParam long userId) {
+    public List<CategoryIncomeReport> getCurrentMonthIncome(Authentication authentication, @RequestParam long userId) throws AccessDeniedException {
+        globalUserValidator.checkUserIsValid(authentication, userId);
         return analyzeService.getCurrentMonthIncome(userId);
     }
 
@@ -45,7 +54,10 @@ public class AnalyzeController {
      * @return список отчетов о расходах по категориям
      */
     @GetMapping("/previous-month/expenses")
-    public List<CategoryExpenseReport> getPreviousMonthExpenses(@RequestParam long userId) {
+    public List<CategoryExpenseReport> getPreviousMonthExpenses(
+            Authentication authentication,
+            @RequestParam long userId) throws AccessDeniedException {
+        globalUserValidator.checkUserIsValid(authentication, userId);
         return analyzeService.getPreviousMonthExpenses(userId);
     }
 
@@ -56,7 +68,10 @@ public class AnalyzeController {
      * @return список отчетов о доходах по категориям
      */
     @GetMapping("/previous-month/income")
-    public List<CategoryIncomeReport> getPreviousMonthIncome(@RequestParam long userId) {
+    public List<CategoryIncomeReport> getPreviousMonthIncome(
+            Authentication authentication,
+            @RequestParam long userId) throws AccessDeniedException {
+        globalUserValidator.checkUserIsValid(authentication, userId);
         return analyzeService.getPreviousMonthIncome(userId);
     }
 
@@ -70,10 +85,12 @@ public class AnalyzeController {
      */
     @GetMapping("/expenses")
     public List<CategoryExpenseReport> getExpensesByPeriod(
+            Authentication authentication,
             @RequestParam long userId,
             @RequestParam String startDate,
             @RequestParam String endDate
-    ) {
+    ) throws AccessDeniedException {
+        globalUserValidator.checkUserIsValid(authentication, userId);
         LocalDate start = LocalDate.parse(startDate);
         LocalDate end = LocalDate.parse(endDate);
         return analyzeService.getExpensesByCategoryForPeriod(userId, start, end);
@@ -89,10 +106,12 @@ public class AnalyzeController {
      */
     @GetMapping("/income")
     public List<CategoryIncomeReport> getIncomeByPeriod(
+            Authentication authentication,
             @RequestParam long userId,
             @RequestParam String startDate,
             @RequestParam String endDate
-    ) {
+    ) throws AccessDeniedException {
+        globalUserValidator.checkUserIsValid(authentication, userId);
         LocalDate start = LocalDate.parse(startDate);
         LocalDate end = LocalDate.parse(endDate);
         return analyzeService.getIncomeByCategoryForPeriod(userId, start, end);

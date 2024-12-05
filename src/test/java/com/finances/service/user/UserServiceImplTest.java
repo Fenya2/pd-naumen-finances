@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -26,6 +27,9 @@ class UserServiceImplTest {
     @Mock
     private AccountService accountService;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     @InjectMocks
     private UserServiceImpl userService;
 
@@ -39,6 +43,9 @@ class UserServiceImplTest {
             user.setId(1);
             return user;
         });
+
+        when(passwordEncoder.encode(Mockito.anyString())).thenAnswer(
+                invocation -> invocation.getArgument(0));
     }
 
     @Test

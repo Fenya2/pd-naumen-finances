@@ -9,6 +9,8 @@ public interface UserService
      */
     User create(String login, String password, String name);
 
+    User createAdmin(String login, String password, String name);
+
     /**
      * Обновляет данные переданного пользователя (должен быть установлен id)
      */

@@ -1,7 +1,10 @@
 package com.finances.model;
 
+import com.finances.security.UserRole;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,8 +37,18 @@ public class User {
     @Column(name = "name")
     private String name;
 
+    /**
+     * Роль пользователя в системе (по умолчанию имеет роль {@link UserRole#USER})
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private UserRole userRole;
+
     public User() {}
 
+    /**
+     * Создает пользователя с ролью {@link UserRole#USER}
+     */
     public User(String login, String password, String name) {
         this.login = login;
         this.password = password;
