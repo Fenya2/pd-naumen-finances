@@ -8,8 +8,8 @@ import com.finances.service.account.AccountService;
 import com.finances.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,8 +26,7 @@ public class AccountController {
     }
 
     @GetMapping(value = "{user_id}")
-    public GetAccountResponse getAccount(@RequestParam long userId)
-    {
+    public GetAccountResponse getAccount(@PathVariable("user_id") long userId) {
         final User user = userService.findById(userId);
         final Account account = accountService.getUserAccount(user);
         return AccountMapper.toGetAccountResponse(account);

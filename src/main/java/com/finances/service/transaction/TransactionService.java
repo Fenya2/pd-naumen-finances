@@ -27,4 +27,6 @@ public interface TransactionService {
                                   String description);
 
     Transaction createInboundTransaction(Account from, Account to, double amount);
+
+    Transaction getById(long id);
 }
