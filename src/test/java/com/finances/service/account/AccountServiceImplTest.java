@@ -30,7 +30,7 @@ class AccountServiceImplTest {
     @Test
     void createUserAccount() {
         final User user = new User();
-        when(accountRepository.findByOwner(user)).thenReturn(Optional.empty());
+        when(accountRepository.getByOwner(user)).thenReturn(Optional.empty());
         when(accountRepository.save(any())).thenAnswer(invocation -> {
             final Account account = invocation.getArgument(0);
             account.setId(1L);
@@ -50,7 +50,7 @@ class AccountServiceImplTest {
         final Account account = new Account();
         account.setAccountType(Account.AccountType.DEFAULT);
 
-        when(accountRepository.findByOwner(user)).thenReturn(Optional.of(account));
+        when(accountRepository.getByOwner(user)).thenReturn(Optional.of(account));
 
         final Account retrievedAccount = accountService.getUserAccount(user);
         Assertions.assertSame(account, retrievedAccount);
@@ -60,7 +60,7 @@ class AccountServiceImplTest {
     void getUserAccountNotFound() {
         User user = new User();
 
-        when(accountRepository.findByOwner(user)).thenReturn(Optional.empty());
+        when(accountRepository.getByOwner(user)).thenReturn(Optional.empty());
 
         Assertions.assertThrows(AccountNotFoundException.class, () -> {
             accountService.getUserAccount(user);

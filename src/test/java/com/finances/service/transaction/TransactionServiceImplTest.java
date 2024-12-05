@@ -68,7 +68,7 @@ class TransactionServiceImplTest {
         final Transaction transaction = transactionService.createTransaction(request);
         Assertions.assertEquals(1L, transaction.getId());
         Assertions.assertEquals(account, transaction.getAccount());
-        Assertions.assertEquals(Transaction.TransactionType.INCOME, transaction.getTransactionType());
+        Assertions.assertEquals(Transaction.TransactionType.INCOME, transaction.getType());
         Assertions.assertEquals(100, transaction.getAmount());
         Assertions.assertEquals(date, transaction.getDate());
     }
@@ -103,7 +103,7 @@ class TransactionServiceImplTest {
         final Transaction transaction = transactionService.createTransaction(request);
         Assertions.assertEquals(1L, transaction.getId());
         Assertions.assertEquals(account, transaction.getAccount());
-        Assertions.assertEquals(Transaction.TransactionType.INCOME, transaction.getTransactionType());
+        Assertions.assertEquals(Transaction.TransactionType.INCOME, transaction.getType());
         Assertions.assertEquals(100, transaction.getAmount());
         Assertions.assertEquals(date, transaction.getDate());
     }
