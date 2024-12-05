@@ -5,9 +5,11 @@ import com.finances.model.Account;
 import com.finances.model.Category;
 import com.finances.model.Transaction;
 import com.finances.model.Transaction.TransactionType;
+import com.finances.model.User;
 
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Сервис управления транзакциями
@@ -29,4 +31,6 @@ public interface TransactionService {
     Transaction createInboundTransaction(Account from, Account to, double amount);
 
     Transaction getById(long id);
+
+    List<Transaction> getAllTransactionsByUser(User user);
 }

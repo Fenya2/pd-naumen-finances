@@ -1,6 +1,7 @@
 package com.finances.repository;
 
 import com.finances.model.Transaction;
+import com.finances.model.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -14,7 +15,7 @@ public interface TransactionRepository extends CrudRepository<Transaction, Long>
        FROM Transaction t
        WHERE t.account.owner.id = :userId
          AND t.date BETWEEN :startDate AND :endDate
-         AND t.transactionType = 'EXPENSE'
+         AND t.type = 'EXPENSE'
        GROUP BY t.category.name
        ORDER BY totalAmount DESC
        """)
@@ -29,7 +30,7 @@ public interface TransactionRepository extends CrudRepository<Transaction, Long>
        FROM Transaction t
        WHERE t.account.owner.id = :userId
          AND t.date BETWEEN :startDate AND :endDate
-         AND t.transactionType = 'INCOME'
+         AND t.type = 'INCOME'
        GROUP BY t.category.name
        ORDER BY totalAmount DESC
        """)
@@ -38,4 +39,6 @@ public interface TransactionRepository extends CrudRepository<Transaction, Long>
             @Param("startDate") Date startDate,
             @Param("endDate") Date endDate
     );
+
+    List<Transaction> gelAllByOwner(User owner);
 }

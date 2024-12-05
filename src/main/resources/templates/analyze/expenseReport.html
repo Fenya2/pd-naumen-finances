@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Expense Report</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        header {
+            background-color: #dc3545;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        h1, h2 {
+            margin: 0;
+        }
+
+        main {
+            padding: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: white;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #e9ecef;
+        }
+
+        .button-back {
+            display: inline-block;
+            margin: 1rem 0;
+            padding: 10px 20px;
+            background-color: #dc3545;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .button-back:hover {
+            background-color: #c82333;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #f1f1f1;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1 th:text="${title}">Expense Report</h1>
+    <h2 th:text="'Месяц: ' + ${month}">Месяц: Январь</h2>
+</header>
+<main>
+    <table>
+        <thead>
+        <tr>
+            <th>Категория</th>
+            <th>Сумма расходов</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="report : ${reports}">
+            <td th:text="${report.categoryName}">Category Name</td>
+            <td th:text="${report.expense}">0.0</td>
+        </tr>
+        </tbody>
+    </table>
+    <a th:href="${backUrl}" class="button-back">Back</a>
+</main>
+<footer>
+    &copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2024</span> Finances Tracker
+</footer>
+</body>
+</html>

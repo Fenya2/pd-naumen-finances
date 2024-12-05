@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -112,5 +113,10 @@ public class TransactionServiceImpl implements TransactionService {
     public Transaction getById(long id) {
         return transactionRepository.findById(id).orElseThrow(
                 () -> new TransactionNotFoundException("Can't find transaction with id %s".formatted(id)));
+    }
+
+    @Override
+    public List<Transaction> getAllTransactionsByUser(User user) {
+        return transactionRepository.gelAllByOwner(user);
     }
 }

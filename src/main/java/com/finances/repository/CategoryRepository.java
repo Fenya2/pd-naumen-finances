@@ -12,4 +12,5 @@ public interface CategoryRepository extends CrudRepository<Category, Long> {
     Optional<Category> getByNameAndOwnerAndParent(String name, User user, @Nonnull Category parent);
     List<Category> getByOwnerAndParent(User user, @Nonnull Category parent);
     Category getByOwnerAndDefaultCategoryTrue(User user);
+    List<Category> findAllByOwner(User user);
 }

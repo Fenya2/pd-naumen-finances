@@ -1,6 +1,7 @@
 package com.finances.service.category;
 
 
+import com.finances.dto.category.view.CategoryNode;
 import com.finances.model.Goal;
 import com.finances.model.User;
 import com.finances.model.Category;
@@ -9,8 +10,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -50,6 +50,38 @@ public class CategoryServiceImpl implements CategoryService {
 
         return defaultIncomeCategory;
     }
+
+    @Override
+    public List<Category> getAllCategoriesForUser(User user) {
+        return categoryRepository.findAllByOwner(user);
+    }
+
+    @Override
+    public List<CategoryNode> buildCategoryTree(List<Category> categories) {
+        Map<Long, CategoryNode> categoryNodeMap = new HashMap<>();
+        List<CategoryNode> roots = new ArrayList<>();
+
+        for (Category category : categories) {
+            categoryNodeMap.put(category.getId(), new CategoryNode(category.getId(), category.getName()));
+        }
+
+        for (Category category : categories) {
+            Long parentId = category.getParent() != null ? category.getParent().getId() : null;
+            CategoryNode currentNode = categoryNodeMap.get(category.getId());
+
+            if (parentId == null) {
+                roots.add(currentNode);
+            } else {
+                CategoryNode parentNode = categoryNodeMap.get(parentId);
+                if (parentNode != null) {
+                    parentNode.getChildren().add(currentNode);
+                }
+            }
+        }
+
+        return roots;
+    }
+
 
     @Override
     public Category findById(long id) {

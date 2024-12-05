@@ -1,5 +1,6 @@
 package com.finances.service.category;
 
+import com.finances.dto.category.view.CategoryNode;
 import com.finances.model.Goal;
 import com.finances.model.User;
 import com.finances.model.Category;
@@ -47,6 +48,8 @@ public interface CategoryService {
      */
     List<Category> getChildrenCategoriesForCategory(Category category);
 
+    List<CategoryNode> buildCategoryTree(List<Category> categories);
+
     /**
      * Возвращает категорию по id категории
      *
@@ -63,5 +66,19 @@ public interface CategoryService {
      */
     Category findByIdSilent(long id);
 
+    /**
+     * Возвращает категорию для цели
+     *
+     * @param goal - цель, для которой требуется создать категорию
+     * @return - созданная категория
+     */
     Category getGoalCategory(Goal goal);
+
+    /**
+     * Возвращает все категории для пользователя
+     *
+     * @param user - пользователь, для которого возвращаем все категории
+     * @return список категорий
+     */
+    List<Category> getAllCategoriesForUser(User user);
 }

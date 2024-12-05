@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная страница</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+
+        section {
+            margin: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .balance {
+            font-size: 20px;
+            margin: 10px 0;
+        }
+
+        .action-buttons a {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+
+        .action-buttons a:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Добро пожаловать, <span th:text="${username}">Пользователь</span>!</h1>
+</header>
+
+<section>
+    <div class="balance">
+        Баланс на вашем кошельке: <span th:text="${balance}">0</span> руб.
+    </div>
+</section>
+
+<section class="action-buttons">
+    <a th:href="'/goal/' + ${userId}">Цели</a>
+    <a th:href="'/transaction/' + ${userId}">Транзакции</a>
+    <a th:href="'/category/view?userId=' + ${userId}">Категории</a>
+    <a th:href="'/analyze?userId=' + ${userId}">Анализ</a>
+</section>
+
+</body>
+</html>
