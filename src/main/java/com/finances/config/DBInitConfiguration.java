@@ -24,7 +24,8 @@ public class DBInitConfiguration {
      * Создает в БД администратора
      */
     @EventListener(ApplicationReadyEvent.class)
-    public void createAdmin() {
+    public void createDefaultUsers() {
         userService.createAdmin("admin", "admin", "admin");
+        userService.create("user", "user", "user");
     }
 }

@@ -7,19 +7,14 @@ import com.finances.model.User;
 import com.finances.security.GlobalUserValidator;
 import com.finances.service.account.AccountService;
 import com.finances.service.user.UserService;
-import jakarta.persistence.Access;
-import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.thymeleaf.templateparser.markup.HTMLTemplateParser;
 
 import java.nio.file.AccessDeniedException;
-import java.security.Principal;
 
 @RestController
 @RequestMapping(value = "/account")
@@ -39,11 +34,9 @@ public class AccountController {
     }
 
     @GetMapping(value = "{user_id}")
-    public GetAccountResponse getAccount(Principal principal, @PathVariable("user_id") long userId) throws AccessDeniedException {
-        if(!globalUserValidator.isValid(principal, userId)) {
-            throw new AccessDeniedException("access denied");
-        }
-        principal.getName();
+    public GetAccountResponse getAccount(Authentication authentication, @PathVariable("user_id") long userId) throws AccessDeniedException {
+        globalUserValidator.checkUserIsValid(authentication, userId);
+        authentication.getName();
         final User user = userService.findById(userId);
         final Account account = accountService.getUserAccount(user);
         return AccountMapper.toGetAccountResponse(account);
