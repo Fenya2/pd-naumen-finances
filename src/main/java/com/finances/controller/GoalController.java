@@ -29,16 +29,16 @@ public class GoalController {
         this.userService = userService;
     }
 
-    @GetMapping(value = "/id")
+    @GetMapping(value = "{idGoal}")
     @ResponseStatus(HttpStatus.OK)
-    public GoalGetResponse getGoal(@RequestParam long idGoal) {
+    public GoalGetResponse getGoal(@PathVariable long idGoal) {
         Goal goal = goalService.findById(idGoal);
         return GoalMapper.toGoalGetResponse(goal);
     }
 
-    @GetMapping(value = "/user")
+    @GetMapping(value = "{idUser}")
     @ResponseStatus(HttpStatus.OK)
-    public GoalsForUserGetResponse getGoalsForUser(@RequestParam long idUser) {
+    public GoalsForUserGetResponse getGoalsForUser(@PathVariable long idUser) {
         User user = userService.findById(idUser);
 
         List<Goal> goalsForUser = goalService.getAllGoalsForUser(user);
