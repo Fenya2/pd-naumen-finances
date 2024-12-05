@@ -49,11 +49,11 @@ public class TransactionServiceImpl implements TransactionService {
         switch(transactionType) {
             case INCOME -> {
                 accountService.deposit(account, amount);
-                transaction.setTransactionType(TransactionType.INCOME);
+                transaction.setType(TransactionType.INCOME);
             }
             case EXPENSE -> {
                 accountService.withdraw(account, amount);
-                transaction.setTransactionType(TransactionType.EXPENSE);
+                transaction.setType(TransactionType.EXPENSE);
             }
             default -> throw new TransactionServiceException("invalid transaction type " + transactionType);
         }
@@ -83,11 +83,11 @@ public class TransactionServiceImpl implements TransactionService {
         switch(transactionType) {
             case INCOME -> {
                 accountService.deposit(account, amount);
-                transaction.setTransactionType(TransactionType.INCOME);
+                transaction.setType(TransactionType.INCOME);
             }
             case EXPENSE -> {
                 accountService.withdraw(account, amount);
-                transaction.setTransactionType(TransactionType.EXPENSE);
+                transaction.setType(TransactionType.EXPENSE);
             }
             default -> throw new TransactionServiceException("invalid transaction type " + transactionType);
         }
@@ -106,5 +106,11 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public Transaction createInboundTransaction(Account from, Account to, double amount) {
         return null;
+    }
+
+    @Override
+    public Transaction getById(long id) {
+        return transactionRepository.findById(id).orElseThrow(
+                () -> new TransactionNotFoundException("Can't find transaction with id %s".formatted(id)));
     }
 }

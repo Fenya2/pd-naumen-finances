@@ -47,7 +47,7 @@ public class Transaction
     private double amount;
 
     @Enumerated(EnumType.STRING)
-    private TransactionType transactionType;
+    private TransactionType type;
 
     private String description;
 }
