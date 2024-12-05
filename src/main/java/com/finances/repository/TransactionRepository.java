@@ -14,7 +14,7 @@ public interface TransactionRepository extends CrudRepository<Transaction, Long>
        FROM Transaction t
        WHERE t.account.owner.id = :userId
          AND t.date BETWEEN :startDate AND :endDate
-         AND t.transactionType = 'EXPENSE'
+         AND t.type = 'EXPENSE'
        GROUP BY t.category.name
        ORDER BY totalAmount DESC
        """)
@@ -29,7 +29,7 @@ public interface TransactionRepository extends CrudRepository<Transaction, Long>
        FROM Transaction t
        WHERE t.account.owner.id = :userId
          AND t.date BETWEEN :startDate AND :endDate
-         AND t.transactionType = 'INCOME'
+         AND t.type = 'INCOME'
        GROUP BY t.category.name
        ORDER BY totalAmount DESC
        """)
