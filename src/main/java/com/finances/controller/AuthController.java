@@ -19,12 +19,12 @@ public class AuthController {
 
     @GetMapping("/login")
     public String getLogin() {
-        return "login";
+        return "auth/login";
     }
 
     @GetMapping("/registration")
     public String getRegistration() {
-        return "registration";
+        return "auth/registration";
     }
 
     @PostMapping("/registration")

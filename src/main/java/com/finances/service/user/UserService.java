@@ -20,4 +20,6 @@ public interface UserService
      * Возвращает пользователя по его идентификатору
      */
     User findById(long id);
+
+    User findByLogin(String login);
 }

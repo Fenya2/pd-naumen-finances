@@ -1,5 +1,6 @@
 package com.finances.config;
 
+import com.finances.security.AuthSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,6 +23,7 @@ public class SpringSecurityConfiguration {
                         .loginPage(LOGIN_URL)
                         .failureUrl("/registration")
                         .defaultSuccessUrl("/home", true)
+                        .successHandler(authSuccessHandler())
                         .permitAll()
                 )
                 .authorizeHttpRequests(auth -> auth
@@ -40,5 +42,10 @@ public class SpringSecurityConfiguration {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthSuccessHandler authSuccessHandler() {
+        return new AuthSuccessHandler();
     }
 }
